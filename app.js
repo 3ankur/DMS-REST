@@ -4,6 +4,7 @@ require('express-async-errors');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const UserRoute = require("./api/routes/Users");
+const ProjectRoute = require("./api/routes/ProjectRoute");
 require('./mongo.config');
 
 
@@ -11,6 +12,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use("/user",UserRoute);
+app.use("/project",ProjectRoute);
 
 
 //Not Found Route
