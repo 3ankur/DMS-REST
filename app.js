@@ -1,8 +1,40 @@
 const express = require("express");
 const app = express();
+require('express-async-errors');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const UserRoute = require("./api/routes/Users");
+require('./mongo.config');
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use("/user",UserRoute);
+
+
+//Not Found Route
+app.use((req, res, next) => {
+    req.status = 404;
+    const error = new Error("Routes not found");
+    next(error);
+  });
+
+//error handeler
+if(app.get("env")==="production"){
+    app.use((error,req,res,next)=>{
+        res.status(req.status || 500).send({
+            message:error.message
+        })
+    })
+}
+
+app.use((error,req,res,next)=>{
+    res.status(req.status || 500).send({
+        message:error.message,
+        stack:error.stack
+    })
+
+})
+
+module.exports = app;
