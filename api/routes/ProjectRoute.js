@@ -4,6 +4,7 @@ const Project = require("../model/ProjectModel");
 const TaskTypes = require("../model/TaskTypeModel");
 const TaskPriority = require("../model/taskPriorityModel");
 const TaskStatus = require("../model/TaskStatusModel");
+const UserProject  = require("../model/UserProject");
 
 //for getting the project
 router.get("/",async (req,res)=>{
@@ -15,8 +16,10 @@ router.get("/",async (req,res)=>{
 router.post("/" , async (req,res)=>{
     const project = new Project();
     project.projectName = req.body.name;
+    project.description = req.body.description  ? req.body.description  : "";
     await project.save();
-    res.status(201).json({message:"Project created successfully",project:project})
+    const projects = await Project.find({}).exec();
+    res.status(201).json({message:"Project created successfully",project:projects})
 });
 
 
@@ -61,5 +64,34 @@ router.post("/storyStatus" , async (req,res)=>{
     await taskStatus.save();
     res.status(201).json({message:"New  Status added ",status:taskStatus})
 });
+
+//add user to project 
+router.post("/addUserIntoProject", async (req,res)=>{
+
+    // check for if user alrady present or active
+    const searchRs = await UserProject.find({userId:req.body.userId,projectId:req.body.projectId})
+    
+ if(searchRs.length>0){
+    res.status(403).json({message:"User alrady Added to project"})
+ }
+ else{
+
+    const userProject = new UserProject();
+    userProject.projectId = req.body.projectId;
+    userProject.user = req.body.userId;
+    userProject.isActive = true
+    await userProject.save();
+    res.status(201).json({message:"User added to project"});
+ }
+
+});
+
+//get proect team 
+router.get("/team/:id",async (req,res)=>{
+    const  users = await UserProject.find({}).select('userregistered').exec()
+    res.status(200).json({"users":users});
+    //res.send(users);
+
+})
 
 module.exports = router;

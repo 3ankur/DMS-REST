@@ -17,6 +17,7 @@ try{
 
 router.post("/",async (req,res,next)=>{
     //try{
+        console.log(req.body)
         const user = new User();
         user.firstName  =   req.body.firstName;
         user.lastName = req.body.lastName;
@@ -26,7 +27,8 @@ router.post("/",async (req,res,next)=>{
         user.role =  req.body.role;
        
        await user.save();
-       res.status(201).json({msg:"User Added Successfully",user:user});
+       const users = await User.find({}).exec();
+       res.status(201).json({msg:"User Added Successfully","users":users});
 
     // }catch(error){
     //     res.status(500)
@@ -36,6 +38,12 @@ router.post("/",async (req,res,next)=>{
 router.get("/role",async (req,res)=>{
         const roles = await Role.find({});
         res.send(roles)
+})
+
+router.get("/validateUserName/:uname",async (req,res)=>{
+    console.log(req.params)
+    const user = await User.find({userName:req.params.uname});
+    res.send(user)
 })
 
 //add new role
