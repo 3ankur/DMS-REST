@@ -26,4 +26,4 @@ const userSchema = new mongoose.Schema({
 },{
     timestamps:true
 });
-module.exports = mongoose.model("UserRegistered",userSchema);
+module.exports = mongoose.model("AllUserInfo",userSchema,"allusersinfo");

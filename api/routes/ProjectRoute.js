@@ -5,6 +5,8 @@ const TaskTypes = require("../model/TaskTypeModel");
 const TaskPriority = require("../model/taskPriorityModel");
 const TaskStatus = require("../model/TaskStatusModel");
 const UserProject  = require("../model/UserProject");
+const alluserInfo  = require("../model/User")
+
 
 //for getting the project
 router.get("/",async (req,res)=>{
@@ -75,7 +77,6 @@ router.post("/addUserIntoProject", async (req,res)=>{
     res.status(403).json({message:"User alrady Added to project"})
  }
  else{
-
     const userProject = new UserProject();
     userProject.projectId = req.body.projectId;
     userProject.user = req.body.userId;
@@ -87,11 +88,18 @@ router.post("/addUserIntoProject", async (req,res)=>{
 });
 
 //get proect team 
-router.get("/team/:id",async (req,res)=>{
-    const  users = await UserProject.find({}).select('userregistered').exec()
-    res.status(200).json({"users":users});
-    //res.send(users);
+router.get("/team/:id",async (req,res)=>{//,'firstName lastName email userName role'
+    const  dt = await UserProject.find({projectId:req.params.id})
 
+    .populate({
+        path: 'user',
+        select:'firstName lastName email userName role',
+        populate: { path: 'role' }
+      });
+    // .populate('user')
+    // .exec()
+    res.status(200).json({"users":dt});
+  
 })
 
 module.exports = router;

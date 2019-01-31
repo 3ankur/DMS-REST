@@ -2,13 +2,22 @@ const express = require("express");
 const router = express.Router();
 const User = require('../model/User');
 const Role = require('../model/Role');
+const userProject = require("../model/UserProject");
 //require('../../mongo.config');
 
 
 router.get("/", async (req,res,next)=>{
 try{
-    const  users = await User.find({}).populate('role').exec()
+    const usersWhoAlradyAssigned = await userProject.find({isActive:true}).select("user")
+    const tmpArr=[];
+    usersWhoAlradyAssigned.forEach(v=>{
+        tmpArr.push(v.user);
+    })
+    const  users = await User.find({_id:{$nin:tmpArr}})
+    .populate('role')
+    .exec()
     res.send(users);
+    //res.status(200).json({"users":users,"assignedUser":usersWhoAlradyAssigned})
 
 }catch(e){
     res.status(500)
