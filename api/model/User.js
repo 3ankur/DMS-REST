@@ -12,11 +12,13 @@ const userSchema = new mongoose.Schema({
     skllSets:String,
     email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     userName:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     password:{
         type:String,

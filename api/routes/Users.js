@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const router = express.Router();
 const User = require('../model/User');
 const Role = require('../model/Role');
@@ -34,7 +35,10 @@ router.post("/",async (req,res,next)=>{
         user.userName = req.body.userName;
         user.password = req.body.password;
         user.role =  req.body.role;
-       
+
+       const hashPwd = await bcrypt.hash(req.body.password,10)
+       console.log(hashPwd);
+       user.password = hashPwd;
        await user.save();
        const users = await User.find({}).exec();
        res.status(201).json({msg:"User Added Successfully","users":users});
