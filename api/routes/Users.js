@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require('../model/User');
 const Role = require('../model/Role');
 const userProject = require("../model/UserProject");
+const jwt = require('jsonwebtoken');
+require('dotenv').load();
 //require('../../mongo.config');
 
 
@@ -47,6 +49,29 @@ router.post("/",async (req,res,next)=>{
     //     res.status(500)
     // }
 });
+
+//login 
+router.post("/login",async(req,res)=>{
+    const user = await User.findOne({email:req.body.uname}).populate('role');
+    console.log(user)
+    if(user){
+        const result = await  bcrypt.compare(req.body.password, user.password);
+        if(result){
+         const token =  jwt.sign({
+                email:user.email,
+                userName:user.userName,
+                role:user.role.role
+            },process.env.JWT_KEY,{ expiresIn: '1h'})
+            res.status(200).json({"msg":"Auth Success","isValid":result,"token":token})
+        }
+        else{
+            res.status(409).json({msg:"Auth faild"})
+        }
+    }else{
+        res.status(409).json({msg:"Auth faild"})
+    }
+
+})
 
 router.get("/role",async (req,res)=>{
         const roles = await Role.find({});
