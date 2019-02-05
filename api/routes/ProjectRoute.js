@@ -1,14 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 const Project = require("../model/ProjectModel");
 const TaskTypes = require("../model/TaskTypeModel");
 const TaskPriority = require("../model/taskPriorityModel");
 const TaskStatus = require("../model/TaskStatusModel");
 const UserProject  = require("../model/UserProject");
 const alluserInfo  = require("../model/User")
+const checkAuth = require("../middleware/check-auth");
+const upload = multer({dest:"upload/"})
 
 
-//for getting the project
+
+//for getting the project checkAuth
 router.get("/",async (req,res)=>{
     const projects = await Project.find({}).exec();
     res.send(projects)
