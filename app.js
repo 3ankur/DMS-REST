@@ -9,8 +9,9 @@ require('./mongo.config');
 
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use('uploads/', express.static('uploads/'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use("/user",UserRoute);
 app.use("/project",ProjectRoute);
 

@@ -8,7 +8,23 @@ const TaskStatus = require("../model/TaskStatusModel");
 const UserProject  = require("../model/UserProject");
 const alluserInfo  = require("../model/User")
 const checkAuth = require("../middleware/check-auth");
-const upload = multer({dest:"upload/"})
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/')
+    },
+    filename: (req, file, cb) => {
+
+        let ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+        cb(null, Date.now() + ext)
+
+      //cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+const upload = multer({storage: storage,limits: {fileSize: 1000000}});
+ const TaskModel =  require("../model/AddNewTask")
+
+//import  TaskModel from "../model/AddNewTask";
 
 
 
@@ -104,6 +120,22 @@ router.get("/team/:id",async (req,res)=>{//,'firstName lastName email userName r
     // .exec()
     res.status(200).json({"users":dt});
   
-})
+});
+
+//create new task
+router.post("/addTask", upload.single("image"), async (req,res)=>{
+    console.log(req.file);
+    const newTask = new TaskModel();
+    newTask.title = req.body.title;
+    newTask.summary = req.body.summary;
+    newTask.priority = req.body.priority;
+    newTask.dueDate = req.body.dueDate;
+    newTask.assignTo = req.body.assignTo;
+    newTask.description = req.body.description;
+    newTask.project = req.body.project;
+    await newTask.save();
+    res.status(201).json({"msg":"Task Created",task:newTask})
+    
+});
 
 module.exports = router;

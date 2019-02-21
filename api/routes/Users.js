@@ -52,7 +52,7 @@ router.post("/",async (req,res,next)=>{
 
 //login 
 router.post("/login",async(req,res)=>{
-    const user = await User.findOne({email:req.body.uname}).populate('role');
+    const user = await User.findOne({email:req.body.email}).populate('role');
     console.log(user)
     if(user){
         const result = await  bcrypt.compare(req.body.password, user.password);
