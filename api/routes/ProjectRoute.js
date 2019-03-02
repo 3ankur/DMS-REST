@@ -8,6 +8,7 @@ const TaskStatus = require("../model/TaskStatusModel");
 const UserProject  = require("../model/UserProject");
 const alluserInfo  = require("../model/User")
 const checkAuth = require("../middleware/check-auth");
+const UsertNew = require("../model/UserTemp");
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -138,4 +139,13 @@ router.post("/addTask", upload.single("image"), async (req,res)=>{
     
 });
 
+
+router.get("/newuser",async (req,res)=>{//,'firstName lastName email userName role'
+   console.log("sdsd");
+    const  dt = await UsertNew.find({})
+    res.status(200).json({"users":dt});
+  
+});
+
 module.exports = router;
+
