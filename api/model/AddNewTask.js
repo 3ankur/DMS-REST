@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 const Tasks = new mongoose.Schema({
+
+    taskCode:{
+        type:String,
+        required:true
+    },
     title: {
         type: String,
         required: true
@@ -17,12 +22,17 @@ const Tasks = new mongoose.Schema({
         required: true
     },
     assignTo: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"AllUserInfo",
         required: true
     },
     description: {
         type: String,
         required: true
+    },
+    status:{
+        type: String,
+        required: true 
     },
     project:{type:mongoose.Schema.Types.ObjectId,ref:"project",required:true}
 

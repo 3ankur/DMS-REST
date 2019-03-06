@@ -60,9 +60,10 @@ router.post("/login",async(req,res)=>{
          const token =  jwt.sign({
                 email:user.email,
                 userName:user.userName,
-                role:user.role.role
+                role:user.role.role,
+                userId:user._id
             },process.env.JWT_KEY,{ expiresIn: '1h'})
-            res.status(200).json({"msg":"Auth Success","isValid":result,"token":token})
+            res.status(200).json({"msg":"Auth Success","isValid":result,"token":token,role:user.role.role})
         }
         else{
             res.status(401).json({msg:"Auth faild"})

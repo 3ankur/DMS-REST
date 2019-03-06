@@ -9,6 +9,7 @@ const UserProject  = require("../model/UserProject");
 const alluserInfo  = require("../model/User")
 const checkAuth = require("../middleware/check-auth");
 const UsertNew = require("../model/UserTemp");
+const mongoose = require("mongoose");
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -126,7 +127,14 @@ router.get("/team/:id",async (req,res)=>{//,'firstName lastName email userName r
 //create new task
 router.post("/addTask", upload.single("image"), async (req,res)=>{
     console.log(req.file);
+    const projectInfo =await Project.findById(req.body.project);
+    //Project.findOne({_id:new ObjectId(req.body.project)});
+    let name = projectInfo.projectName.charAt(0)+projectInfo.projectName.charAt(1);
+
+    const taskCount = await TaskModel.find({});
+    let taskCode = `${name.toUpperCase()}-${taskCount.length+1}`;
     const newTask = new TaskModel();
+    newTask.taskCode = taskCode;
     newTask.title = req.body.title;
     newTask.summary = req.body.summary;
     newTask.priority = req.body.priority;
@@ -134,11 +142,22 @@ router.post("/addTask", upload.single("image"), async (req,res)=>{
     newTask.assignTo = req.body.assignTo;
     newTask.description = req.body.description;
     newTask.project = req.body.project;
+    newTask.status = "TODO";
     await newTask.save();
-    res.status(201).json({"msg":"Task Created",task:newTask})
+    res.status(201).json({"msg":"Task Created",task:newTask,"Info":projectInfo,"code":taskCode})
     
 });
 
+//get the project task
+router.get("/getTasks/:id",async (req,res)=>{
+    const  lists = await TaskModel.find({project:req.params.id})
+    .populate({
+        path: 'assignTo',
+        populate: { path: 'role' }
+      });
+    res.status(200).json({"tasks":lists});
+
+});
 
 router.get("/newuser",async (req,res)=>{//,'firstName lastName email userName role'
    console.log("sdsd");
@@ -146,6 +165,32 @@ router.get("/newuser",async (req,res)=>{//,'firstName lastName email userName ro
     res.status(200).json({"users":dt});
   
 });
+
+//getting the user activity
+router.get("/userActivity",checkAuth,async (req,res)=>{
+    var ObjectId = mongoose.Types.ObjectId; 
+   const dt = await UserProject.find({user: new  ObjectId(req.userData.userId)});
+   console.log(dt);
+
+   const todoList = await TaskModel.find({project:dt[0]["projectId"],status:"TODO" }); 
+   const doneList = await TaskModel.find({project:dt[0]["projectId"],status:"DONE" }); 
+   const inPogressList = await TaskModel.find({project:dt[0]["projectId"],status:"INPOGRESS" }); 
+   //mongoose.Types.ObjectId();
+    res.status(200).json({"users": req.userData,
+                info:dt,taskList:{todo:todoList,done:doneList,inPogress:inPogressList}});
+
+});
+
+router.put("/updateTaskStatus",async (req,res)=>{
+    const taskInfo = await TaskModel.findByIdAndUpdate(req.body.taskId,req.body);
+    if(taskInfo){
+
+    }
+    res.status(200).json({"info": taskInfo});
+
+});
+
+
 
 module.exports = router;
 
