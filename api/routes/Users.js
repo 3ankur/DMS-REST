@@ -5,6 +5,7 @@ const User = require('../model/User');
 const Role = require('../model/Role');
 const userProject = require("../model/UserProject");
 const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
 require('dotenv').load();
 //require('../../mongo.config');
 
@@ -57,13 +58,20 @@ router.post("/login",async(req,res)=>{
     if(user){
         const result = await  bcrypt.compare(req.body.password, user.password);
         if(result){
-         const token =  jwt.sign({
+            var ObjectId = mongoose.Types.ObjectId; 
+          const assignedProject =   await userProject.findOne({user: new  ObjectId(user._id),isActive:true});
+        console.log(assignedProject);
+          let projectId =  assignedProject.projectId ? assignedProject.projectId : null ;
+          const token =  jwt.sign({
                 email:user.email,
                 userName:user.userName,
                 role:user.role.role,
-                userId:user._id
+                userId:user._id,
+                userProjectId:projectId
             },process.env.JWT_KEY,{ expiresIn: '1h'})
-            res.status(200).json({"msg":"Auth Success","isValid":result,"token":token,role:user.role.role})
+            res.status(200).json({"msg":"Auth Success","isValid":result,
+            "token":token,role:user.role.role,
+             userName:user.userName,userProjectId:projectId});
         }
         else{
             res.status(401).json({msg:"Auth faild"})
@@ -87,7 +95,6 @@ router.get("/validateUserName/:uname",async (req,res)=>{
 
 //add new role
 router.post("/role",async (req,res)=>{
-
     const role = new Role();
     role.role = req.body.role;
     await role.save();
