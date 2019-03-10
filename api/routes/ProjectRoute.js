@@ -187,9 +187,24 @@ router.put("/updateTaskStatus",async (req,res)=>{
 
     }
     res.status(200).json({"info": taskInfo});
-
 });
 
+router.get("/taskdetail/:taskId",async (req,res)=>{
+    if(req.params.taskId){
+        const taskInfo = await TaskModel.findById(req.params.taskId)
+        .populate({
+            path: 'assignTo',
+            populate: { path: 'role' }
+          });
+        res.status(200).json({"info": taskInfo});
+    }
+    else{
+        const taskInfo = await TaskModel.findById(req.params.taskId);
+        res.status(500).json({"error": "Parameter missing"});
+    }
+  
+    
+});
 
 
 module.exports = router;
