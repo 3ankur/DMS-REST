@@ -12,7 +12,7 @@ require('dotenv').load();
 
 router.get("/", async (req,res,next)=>{
 try{
-    const usersWhoAlradyAssigned = await userProject.find({isActive:true}).select("user")
+    const usersWhoAlradyAssigned = await userProject.find().select("user")
     const tmpArr=[];
     usersWhoAlradyAssigned.forEach(v=>{
         tmpArr.push(v.user);
@@ -54,14 +54,14 @@ router.post("/",async (req,res,next)=>{
 //login 
 router.post("/login",async(req,res)=>{
     const user = await User.findOne({email:req.body.email}).populate('role');
-    console.log(user)
+    //console.log(user)
     if(user){
         const result = await  bcrypt.compare(req.body.password, user.password);
         if(result){
+            console.log("its the one way.");
             var ObjectId = mongoose.Types.ObjectId; 
           const assignedProject =   await userProject.findOne({user: new  ObjectId(user._id),isActive:true});
-        console.log(assignedProject);
-          let projectId =  assignedProject.projectId ? assignedProject.projectId : null ;
+          let projectId =  assignedProject && assignedProject.projectId ? assignedProject.projectId : null;
           const token =  jwt.sign({
                 email:user.email,
                 userName:user.userName,

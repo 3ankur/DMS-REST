@@ -1,14 +1,15 @@
 const express = require("express");
 const app = express();
+const helmet = require('helmet');
 require('express-async-errors');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const UserRoute = require("./api/routes/Users");
 const ProjectRoute = require("./api/routes/ProjectRoute");
-require('./mongo.config');
-
+const mongoConnection = require('./mongo.config');
+app.use(helmet());
 app.use((req,res,next)=>{
-    console.log(req.headers)
+    //console.log(req.headers)
       // Website you wish to allow to connect
       res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -23,10 +24,11 @@ app.use((req,res,next)=>{
       res.setHeader('Access-Control-Allow-Credentials', true);
   
       // Pass to next layer of middleware
+      mongoConnection();
       next();
 });
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use('uploads/', express.static('uploads/'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));

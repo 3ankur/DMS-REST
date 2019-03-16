@@ -10,6 +10,7 @@ const alluserInfo  = require("../model/User")
 const checkAuth = require("../middleware/check-auth");
 const UsertNew = require("../model/UserTemp");
 const mongoose = require("mongoose");
+const TaskComments = require("../model/TaskComments");
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -134,6 +135,7 @@ router.post("/addTask", upload.single("image"), async (req,res)=>{
     const taskCount = await TaskModel.find({});
     let taskCode = `${name.toUpperCase()}-${taskCount.length+1}`;
     const newTask = new TaskModel();
+    newTask.type = req.body.type ? req.body.type : "Story";
     newTask.taskCode = taskCode;
     newTask.title = req.body.title;
     newTask.summary = req.body.summary;
@@ -199,12 +201,23 @@ router.get("/taskdetail/:taskId",async (req,res)=>{
         res.status(200).json({"info": taskInfo});
     }
     else{
-        const taskInfo = await TaskModel.findById(req.params.taskId);
-        res.status(500).json({"error": "Parameter missing"});
-    }
-  
-    
+        res.status(400).json({"error": "Parameter missing"});
+    } 
 });
+
+//get task comments 
+router.get("/taskComments/:taskId",async (req,res)=>{
+    if(req.params.taskId){
+        const comments = TaskComments.find({task:req.params.taskId});
+        res.status(200).json({"comments":comments});
+    }else{
+        res.status(400).json({"comments":comments});
+    }
+});
+
+
+//get task dates
+
 
 
 module.exports = router;
