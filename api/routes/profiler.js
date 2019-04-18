@@ -155,7 +155,7 @@ fetchImages =()=> {
     params: {
       method: 'flickr.photos.search',
       api_key: "a751743c271a70cabff1ffb226cfb26c", //config.api_key,
-      tags: this.tag,
+      tags: 'dog',
       extras: 'url_n, owner_name, date_taken, views',
       page: 1,
       format: 'json',
