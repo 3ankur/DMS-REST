@@ -101,50 +101,69 @@ router.get('/getSourceVersion/:sourceId', function (req, res, next) {
 
 })
 
-router.get("/request", (req,res)=>{
-let URL = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
-//const request = require('request');
-var headers = {
-  'Content-Type': 'application/json'
-}
-var options = {
-  url: URL,
-  method: 'GET',
-  headers: headers,
-}
-// request(options, function (error, response, body) {
-//   console.log(body,response,error)
-//   if (!error && response.statusCode == 200) {
+router.get("/request", async (req,res)=>{
+// let URL = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
+// //const request = require('request');
+// var headers = {
+//   'Content-Type': 'application/json'
+// }
+// var options = {
+//   url: URL,
+//   method: 'GET',
+//   headers: headers,
+// }
+// // request(options, function (error, response, body) {
+// //   console.log(body,response,error)
+// //   if (!error && response.statusCode == 200) {
       
-//       res.status(200).json({"data":body,"res":response})
+// //       res.status(200).json({"data":body,"res":response})
 
-//   } else {
-//       console.log(body)
-//       res.status(200).json({"data":body})
-//   }
-// })
+// //   } else {
+// //       console.log(body)
+// //       res.status(200).json({"data":body})
+// //   }
+// // })
 
 
-http.get(URL, (resp) => {
-  let data = '';
+// http.get(URL, (resp) => {
+//   let data = '';
 
-  // Concatinate each chunk of data
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
+//   // Concatinate each chunk of data
+//   resp.on('data', (chunk) => {
+//     data += chunk;
+//   });
 
-  // Once the response has finished, do something with the result
-  resp.on('end', () => {
-    res.json(JSON.parse(data));
-  });
+//   // Once the response has finished, do something with the result
+//   resp.on('end', () => {
+//     res.json(JSON.parse(data));
+//   });
 
-  // If an error occured, return the error to the user
-}).on("error", (err) => {
-  res.json("Error: " + err.message);
+//   // If an error occured, return the error to the user
+// }).on("error", (err) => {
+//   res.json("Error: " + err.message);
+// });
+
+let data = await this.fetchImages();
+res.json({"info":data});
 });
 
-});
 
+fetchImages =()=> {
+  return axios({
+    method: 'get',
+    url: 'https://api.flickr.com/services/rest',
+    params: {
+      method: 'flickr.photos.search',
+      api_key: "a751743c271a70cabff1ffb226cfb26c", //config.api_key,
+      tags: this.tag,
+      extras: 'url_n, owner_name, date_taken, views',
+      page: 1,
+      format: 'json',
+      nojsoncallback: 1,
+      per_page: 30,
+    }
+  })
+}
 
 
 
