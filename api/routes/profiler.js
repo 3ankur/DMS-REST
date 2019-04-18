@@ -143,7 +143,7 @@ router.get("/request", async (req,res)=>{
 //   res.json("Error: " + err.message);
 // });
 
-let data = await this.fetchImages();
+let data = await fetchImages();
 res.json({"info":data});
 });
 
