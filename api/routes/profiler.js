@@ -144,7 +144,7 @@ router.get("/request", async (req,res)=>{
 // });
 
 let data = await fetchImages();
-res.json(data);
+res.json({"info": JSON.stringify(data) } );
 });
 
 
