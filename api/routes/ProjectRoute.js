@@ -11,6 +11,12 @@ const checkAuth = require("../middleware/check-auth");
 const UsertNew = require("../model/UserTemp");
 const mongoose = require("mongoose");
 const TaskComments = require("../model/TaskComments");
+//const Schedule = require('node-schedule');
+
+// var j = Schedule.scheduleJob('* * * * *', function(){
+//     console.log('The answer to life, the universe, and everything!');
+//   });
+//   console.log(j.nextInvocation())
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -209,6 +215,16 @@ router.get("/taskdetail/:taskId",async (req,res)=>{
 router.get("/taskComments/:taskId",async (req,res)=>{
     if(req.params.taskId){
         const comments = TaskComments.find({task:req.params.taskId});
+        res.status(200).json({"comments":comments});
+    }else{
+        res.status(400).json({"comments":comments});
+    }
+});
+
+//add task comments 
+router.post("/taskComments/:taskId",async (req,res)=>{
+    if(req.params.taskId){
+        const taskComment = new TaskComments();
         res.status(200).json({"comments":comments});
     }else{
         res.status(400).json({"comments":comments});

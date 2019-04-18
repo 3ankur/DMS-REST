@@ -5,6 +5,10 @@ const TaskComments = new mongoose.Schema(
       type: String,
       required: true
     },
+    user:{
+      type: mongoose.Schema.Types.ObjectId, ref: "task",  ref:"AllUserInfo",
+      required: true
+    },
     task: { type: mongoose.Schema.Types.ObjectId, ref: "task", required: true },
     otherInfo: {
       type: String

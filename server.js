@@ -4,6 +4,8 @@ const app = require("./app");
 const socket = require('socket.io');
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
+
+
 server.listen(port,()=>{
     console.log("server started.. at :",process.env.PORT);
 });

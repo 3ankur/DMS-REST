@@ -7,6 +7,15 @@ const bodyParser = require("body-parser");
 const UserRoute = require("./api/routes/Users");
 const ProjectRoute = require("./api/routes/ProjectRoute");
 const mongoConnection = require('./mongo.config');
+
+const Profiler = require("./api/routes/profiler");
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//app.use('/api/v1', router);
+
 app.use(helmet());
 app.use((req,res,next)=>{
     //console.log(req.headers)
@@ -28,12 +37,14 @@ app.use((req,res,next)=>{
       next();
 });
 
-//app.use(morgan('dev'));
-app.use('uploads/', express.static('uploads/'));
+//app.use(morgan('dev')); 'uploads/', 
+app.use(express.static('uploads'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use("/user",UserRoute);
 app.use("/project",ProjectRoute);
+app.use("/profiler",Profiler);
+
 
 
 
