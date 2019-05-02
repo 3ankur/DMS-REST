@@ -39,8 +39,13 @@ app.use((req,res,next)=>{
 
 //app.use(morgan('dev')); 'uploads/', 
 app.use(express.static('uploads'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+//pp.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({extended:true}));
+
+
+app.use(bodyParser.json({limit: "500mb"}));
+app.use(bodyParser.urlencoded({limit: "500mb", extended: true, parameterLimit:50000}));
+
 app.use("/user",UserRoute);
 app.use("/project",ProjectRoute);
 app.use("/profiler",Profiler);
