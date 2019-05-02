@@ -8,8 +8,7 @@ var mime = require('mime');
 const nodemailer = require("nodemailer");
 const appJSON = [{"id":1,"name":"Rave","info":"Rave","value":"Rave","label":"Rave","versions":[{"id":"RAVE_V_1_0","name":"V1.0","rules":[{"id":"1","ruleId":"1","ruleCheck":"study id can not be null","tableName":"Study","columnName":"STUDY_ID","description":"check study number is null or not ","ruleType":"NULL CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"value":"V1.0"}]},{"id":3,"name":"CTMS","info":"CTMS","value":"CTMS","label":"CTMS","versions":[{"id":"CTMS_V_1_0","name":"V1.0","rules":[{"id":"1","ruleId":"1","ruleCheck":"study id can not be null","tableName":"Study","columnName":"STUDY_ID","description":"check study number is null or not ","ruleType":"NULL CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"value":"V1.0"}]}];
 const axios = require('axios');
-var request = require('request');
-const http = require('https');
+const profilerReport ={"source":"Rave","templateVersion":"V1.0","submittedDate":"20 Apr 2019","submittedBy":"John D","tablesInfo":{"STUDY_DETAILS":{"rules":[{"id":"1","ruleId":"1","ruleCheck":"STUDY SHOULD BE ALPHANUMERIC","tableName":"Study","columnName":"STUDY_REF","description":"check study number is numeric or not ","ruleType":"ALPHANUMERIC CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"entityInfo":{"datasetInfo":[{"name":"Number of variables","value":"10"},{"name":"Number of observations","value":"2726"},{"name":"Total Missing (%)","value":"1.5%"},{"name":"Total size in memory","value":"2.5Mib"},{"name":"Average record size in memory","value":"101B"}],"variablesType":[{"name":"Numeric","value":"1"},{"name":"Categorical","value":"4"},{"name":"Boolean","value":"5"},{"name":"Date","value":"1"},{"name":"Rejected","value":"0"},{"name":"Unsupported","value":"2"}]},"warnings":[{"name":"GeoLocation has 7315 / 16.0% missing values","type":"Missing","otherInfo":{}},{"name":"GeoLocation has a high cardinality: 17101 distinct values","type":"Warning","otherInfo":{}},{"name":"mass (g) his highly skewed (γ1 = 76.918)","type":"skewed","otherInfo":{}},{"name":"reclat has 6438 / 14.1% zeros","type":"Zeros","otherInfo":{}}]},"SITE_DETAILS":{"rules":[{"id":"1","ruleId":"1","ruleCheck":"study id can not be null","tableName":"Study","columnName":"STUDY_ID","description":"check study number is null or not ","ruleType":"NULL CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"entityInfo":{"datasetInfo":[{"name":"Number of variables","value":"14"},{"name":"Number of observations","value":"45726"},{"name":"Total Missing (%)","value":"3.5%"},{"name":"Total size in memory","value":"3.5Mib"},{"name":"Average record size in memory","value":"105B"}],"variablesType":[{"name":"Numeric","value":"4"},{"name":"Categorical","value":"5"},{"name":"Boolean","value":"1"},{"name":"Date","value":"3"},{"name":"Rejected","value":"1"},{"name":"Unsupported","value":"2"}]},"warnings":[{"name":"GeoLocation has 7315 / 16.0% missing values","type":"Missing","otherInfo":{}},{"name":"GeoLocation has a high cardinality: 17101 distinct values","type":"Warning","otherInfo":{}},{"name":"mass (g) his highly skewed (γ1 = 76.918)","type":"skewed","otherInfo":{}},{"name":"reclat has 6438 / 14.1% zeros","type":"Zeros","otherInfo":{}}]},"STUDY_SITE_RELATIONSHIP":{"rules":[{"id":"1","ruleId":"1","ruleCheck":"study id can not be null","tableName":"Study","columnName":"STUDY_ID","description":"check study number is null or not ","ruleType":"NULL CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"entityInfo":{"datasetInfo":[{"name":"Number of variables","value":"14"},{"name":"Number of observations","value":"45726"},{"name":"Total Missing (%)","value":"3.5%"},{"name":"Total size in memory","value":"3.5Mib"},{"name":"Average record size in memory","value":"105B"}],"variablesType":[{"name":"Numeric","value":"4"},{"name":"Categorical","value":"5"},{"name":"Boolean","value":"1"},{"name":"Date","value":"3"},{"name":"Rejected","value":"1"},{"name":"Unsupported","value":"2"}]},"warnings":[{"name":"GeoLocation has 7315 / 16.0% missing values","type":"Missing","otherInfo":{}},{"name":"GeoLocation has a high cardinality: 17101 distinct values","type":"Warning","otherInfo":{}},{"name":"mass (g) his highly skewed (γ1 = 76.918)","type":"skewed","otherInfo":{}},{"name":"reclat has 6438 / 14.1% zeros","type":"Zeros","otherInfo":{}}]},"SUJECT_INFO":{"rules":[{"id":"1","ruleId":"1","ruleCheck":"study id can not be null","tableName":"Study","columnName":"STUDY_ID","description":"check study number is null or not ","ruleType":"NULL CHECK"},{"id":"2","ruleId":"2","description":"check study name is null or not ","ruleCheck":"study name can not be null","tableName":"Study","columnName":"STUDY_NAME","ruleType":"NULL CHECK"},{"id":"3","ruleId":"3","description":"SUBJECT NAME CANT BE NULL","ruleCheck":"SUBJECT NAME CANT BE NULL","tableName":"SUBJECT INFO","columnName":"SUBJECT_NAME","ruleType":"NULL CHECK"},{"id":"4","ruleId":"4","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"5","ruleId":"5","description":"study id can not be null","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"},{"id":"6","ruleId":"6","description":"its the ","ruleCheck":"study id can not be null","tableName":"Study Info","columnName":"STUDY_DETAILS","ruleType":"NULL CHECK"}],"entityInfo":{"datasetInfo":[{"name":"Number of variables","value":"14"},{"name":"Number of observations","value":"45726"},{"name":"Total Missing (%)","value":"3.5%"},{"name":"Total size in memory","value":"3.5Mib"},{"name":"Average record size in memory","value":"105B"}],"variablesType":[{"name":"Numeric","value":"4"},{"name":"Categorical","value":"5"},{"name":"Boolean","value":"1"},{"name":"Date","value":"3"},{"name":"Rejected","value":"1"},{"name":"Unsupported","value":"2"}]},"warnings":[{"name":"GeoLocation has 7315 / 16.0% missing values","type":"Missing","otherInfo":{}},{"name":"GeoLocation has a high cardinality: 17101 distinct values","type":"Warning","otherInfo":{}},{"name":"mass (g) his highly skewed (γ1 = 76.918)","type":"skewed","otherInfo":{}},{"name":"reclat has 6438 / 14.1% zeros","type":"Zeros","otherInfo":{}}]}},"dataSet":[{}],"templateName":"Rave_UniqueCheck_Temp01"};
 
 // var j = Schedule.scheduleJob('* * * * *', function(){
 //     console.log('The answer to life, the universe, and everything!');
@@ -96,53 +95,18 @@ router.get('/getSourceVersion/:sourceId', function (req, res, next) {
  if(req.params.sourceId){
    const filerResult = appJSON.filter((v)=>{return v.name ===req.params.sourceId});
    res.status(200).json({"msg":"Success",result:filerResult[0]["versions"],"Info":{},"code":{}})
+ 
+  }
+})
 
- }
-
+router.get("/report/:id",async (req,res)=>{
+  console.log(req.params.id);
+  res.status(200).json({"result":profilerReport});
 })
 
 router.get("/request", async (req,res)=>{
-// let URL = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
-// //const request = require('request');
-// var headers = {
-//   'Content-Type': 'application/json'
-// }
-// var options = {
-//   url: URL,
-//   method: 'GET',
-//   headers: headers,
-// }
-// // request(options, function (error, response, body) {
-// //   console.log(body,response,error)
-// //   if (!error && response.statusCode == 200) {
-      
-// //       res.status(200).json({"data":body,"res":response})
-
-// //   } else {
-// //       console.log(body)
-// //       res.status(200).json({"data":body})
-// //   }
-// // })
-
-
-// http.get(URL, (resp) => {
-//   let data = '';
-
-//   // Concatinate each chunk of data
-//   resp.on('data', (chunk) => {
-//     data += chunk;
-//   });
-
-//   // Once the response has finished, do something with the result
-//   resp.on('end', () => {
-//     res.json(JSON.parse(data));
-//   });
-
-//   // If an error occured, return the error to the user
-// }).on("error", (err) => {
-//   res.json("Error: " + err.message);
-// });
-
+  let reqObj = {};
+  
 let resData = await fetchImages();
 res.json({"info": resData.data } );
 });

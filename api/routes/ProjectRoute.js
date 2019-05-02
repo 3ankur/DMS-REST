@@ -24,13 +24,15 @@ var storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
 
-        let ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-        cb(null, Date.now() + ext)
+        let ext = file.originalname.trim().substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+       console.log("====>",ext)
+       let upFileName = file.originalname.trim().substring(0,file.originalname.lastIndexOf('.'));
+        cb(null, upFileName+Date.now() + ext)
 
       //cb(null, file.fieldname + '-' + Date.now())
     }
 });
-const upload = multer({storage: storage,limits: {fileSize: 1000000}});
+const upload = multer({storage: storage,limits: {fileSize: 100000000000}});
  const TaskModel =  require("../model/AddNewTask")
 
 //import  TaskModel from "../model/AddNewTask";
@@ -221,16 +223,26 @@ router.get("/taskComments/:taskId",async (req,res)=>{
     }
 });
 
+
 //add task comments 
 router.post("/taskComments/:taskId",async (req,res)=>{
-    if(req.params.taskId){
+    if(req.params.taskId && req.params.comments){
         const taskComment = new TaskComments();
+        await taskComment.save();
         res.status(200).json({"comments":comments});
     }else{
         res.status(400).json({"comments":comments});
     }
 });
 
+
+router.post("/upload", upload.single("file"), async (req,res)=>{
+   //console.log(req.file);
+    res.status(200).json(
+         {"message":"Uploaded successfully !!",
+         "fileInfo":"NO_()123",name:req.file.filename}
+         );
+})
 
 //get task dates
 
