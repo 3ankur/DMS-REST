@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
       cb(null, 'uploads/')
     },
     filename: (req, file, cb) => {
-
+        console.log("==========>",file)
         let ext = file.originalname.trim().substring(file.originalname.lastIndexOf('.'), file.originalname.length);
        console.log("====>",ext)
        let upFileName = file.originalname.trim().substring(0,file.originalname.lastIndexOf('.'));
@@ -237,10 +237,10 @@ router.post("/taskComments/:taskId",async (req,res)=>{
 
 
 router.post("/upload", upload.single("file"), async (req,res)=>{
-   //console.log(req.file);
+  // console.log(req.file);
     res.status(200).json(
          {"message":"Uploaded successfully !!",
-         "fileInfo":"NO_()123",name:req.file.filename}
+         "fileInfo":"NO_()123",name: (req.file && req.file.filename ? req.file : "N/A" )}
          );
 })
 
