@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 require('dotenv').load();
 //require('../../mongo.config');
+var Request = require("axios");
 
 
 router.get("/", async (req,res,next)=>{
@@ -100,5 +101,29 @@ router.post("/role",async (req,res)=>{
     await role.save();
     res.status(201).json({msg:"User Role added Successfully",role:role});
 });
+
+
+//add stock chart
+router.get("/trade/:type",async (req,res)=>{
+
+  console.log(req.params);
+  
+  try{
+
+    let type = "1d";
+    if(Object.keys(req.params).length){
+      type =  req.params.type;
+    }
+
+    let d = new Date();
+    const resD =await Request.get(`https://api.bitfinex.com/v2/candles/trade:${type}:tBTCUSD/hist?end=${d.getTime()}&limit=1000`);
+   // console.log(resD.data);
+    res.send(resD.data);
+  }catch(e){
+   res.send(e);
+  }
+  
+
+})
 
 module.exports = router;
